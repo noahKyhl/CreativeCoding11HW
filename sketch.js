@@ -1,31 +1,31 @@
-// Player position
+// player position
 var playerX = 50;
 var playerY = 50;
 
-// Movement keys
+// movement keys
 var keyW = 87;
 var keyA = 65;
 var keyS = 83;
 var keyD = 68;
 
-// Moving obstacles array
+// moving obstacles array
 var obstacles = [];
 
-// Mouse-placed obstacles array
+// my mouseObstacle array, will be used for my shields in game
 var mouseObstacles = [];
 
-// Exit area
+//exit area
 var exitX = 450;
 var exitY = 550;
 var exitSize = 60;
 
-// Shields
+//amount of shields
 var maxShields = 5;
 
 function setup() {
     createCanvas(500, 600);
 
-    // Create 8 random moving obstacles
+    //intiate 8 random moving obstacles
     for (var i = 0; i < 8; i++) {
         var randX = random(0, width - 60);
         var randY = random(0, height - 60);
@@ -36,23 +36,23 @@ function setup() {
 function draw() {
     background(220);
 
-    // Draw the exit zone
+    //exit zone creation
     fill(0, 255, 0);
     rect(exitX, exitY, exitSize, exitSize);
     textSize(16);
     fill(0);
     text("EXIT", exitX + 5, exitY + 25);
 
-    // Draw player
+    //draw player
     drawPlayer();
     handlePlayerMovement();
 
-    // Draw Shield displays
+    //shield  amount displays
     fill(0);
     textSize(16);
     text("Shields left: " + maxShields, 20, 20);
 
-    // Warn player
+    // Warn Player!!!!!
     if (maxShields === 0) {
         fill(255, 0, 0);
         text("No shields left!", 20, 40);
@@ -63,24 +63,24 @@ function draw() {
         ellipse(playerX, playerY, 40); // glowing aura
     }
 
-    // Move and draw each obstacle, and check collision
+    // move and draw each obstacle
     for (var i = 0; i < obstacles.length; i++) {
         moveObstacle(obstacles[i]);
         drawObstacle(obstacles[i]);
 
-        if (checkCollision(playerX, playerY, 10, obstacles[i]) && !isInSafeZone(playerX, playerY, 10)) {
+        /*if (checkCollision(playerX, playerY, 10, obstacles[i]) && !isInSafeZone(playerX, playerY, 10)) {
             endGame("Game Over");
-        }
-    }
+        }   COMMENTED OUT SINCE WE ARE NOT INCLUDING COLLISIONS FOR THIS ASSIGNMENT*/ 
+    } 
 
-    // Draw mouse-created obstacles
+    // shields being mouse-created 
     for (var j = 0; j < mouseObstacles.length; j++) {
         var m = mouseObstacles[j];
         fill(150, 100, 200);
         rect(m.x, m.y, m.w, m.h);
     }
 
-    // Win condition check
+    // win condition check
     if (playerX > exitX && playerX < exitX + exitSize &&
         playerY > exitY && playerY < exitY + exitSize) {
         fill(0);
@@ -126,7 +126,7 @@ function moveObstacle(obs) {
     obs.x += obs.speedX;
     obs.y += obs.speedY;
 
-    // Wrap around the screen
+    //travel off screen
     if (obs.x > width) {
         obs.x = 0;
     } else if (obs.x < 0) {
@@ -157,7 +157,7 @@ function mouseClicked() {
     }
 }
 
-// Check circular player against rectangular obstacle
+//player collision with obstacle
 function checkCollision(px, py, pr, obs) {
     return (px + pr > obs.x &&
             px - pr < obs.x + obs.w &&
@@ -165,7 +165,7 @@ function checkCollision(px, py, pr, obs) {
             py - pr < obs.y + obs.h);
 }
 
-// Same idea for mouse-placed blocks
+//player in shield collision
 function checkBoxCollision(px, py, pr, block) {
     return (px + pr > block.x &&
             px - pr < block.x + block.w &&
@@ -173,7 +173,7 @@ function checkBoxCollision(px, py, pr, block) {
             py - pr < block.y + block.h);
 }
 
-// Show message and stop the game
+//end game message
 function endGame(message) {
     fill(0);
     textSize(32);
